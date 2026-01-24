@@ -1,0 +1,89 @@
+# Maven 构建目录
+.mvn/
+.trae/
+
+# 编译输出
+**/target/
+/out/
+/bin/
+/build/
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+
+# IDE - IntelliJ IDEA
+*.iml
+*.ipr
+*.iws
+.idea_modules/
+
+# IDE - Eclipse
+.project
+.classpath
+.settings/
+*.classpath
+*.project
+*.settings/
+bin/
+
+# IDE - VS Code
+.vscode/
+*.code-workspace
+
+# IDE - NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# 日志文件
+**/*.log
+logs/
+temp/
+
+# 临时文件
+*.tmp
+*.temp
+*.swp
+*~
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# 环境配置文件（包含敏感信息）
+application-local.yml
+application-local.properties
+application-local.*
+config-local.yml
+config-local.properties
+application-*.yml
+application-*.properties
+
+# Maven Wrapper
+.mvn/wrapper/maven-wrapper.jar
+
+# Gradle
+.gradle/
+build/
+!gradle-wrapper.jar
+
+# 压缩包
+*.7z
+*.dmg
+*.gz
+*.iso
+*.rar
+*.tar
+
+# 文档（可选，根据需求保留或删除）
+*.pdf
+*.doc
+*.docx
+*.xls
+*.xlsx
+*.ppt
+*.pptx

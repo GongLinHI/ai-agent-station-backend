@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gonglin.ai4knowledge.infrastructure.mysql.mapper.AiClientMapper">
+
+    <sql id="notDeleted">
+        is_deleted = 0
+    </sql>
+
+    <sql id="allColumns">
+        id, client_id, client_name, description, status, create_time, update_time, is_deleted, delete_time
+    </sql>
+
+    <sql id="DynamicInsertColumnName">
+        <if test="clientId != null">client_id,</if>
+        <if test="clientName != null">client_name,</if>
+        <if test="description != null">description,</if>
+        <if test="status != null">status,</if>
+        <if test="createTime != null">create_time,</if>
+        <if test="updateTime != null">update_time,</if>
+        <if test="isDeleted != null">is_deleted,</if>
+        <if test="deleteTime != null">delete_time,</if>
+    </sql>
+
+    <sql id="DynamicInsertColumnValue">
+        <if test="clientId != null">#{clientId},</if>
+        <if test="clientName != null">#{clientName},</if>
+        <if test="description != null">#{description},</if>
+        <if test="status != null">#{status},</if>
+        <if test="createTime != null">#{createTime},</if>
+        <if test="updateTime != null">#{updateTime},</if>
+        <if test="isDeleted != null">#{isDeleted},</if>
+        <if test="deleteTime != null">#{deleteTime},</if>
+    </sql>
+
+    <sql id="DynamicUpdateColumns">
+        <if test="clientId != null">client_id = #{clientId},</if>
+        <if test="clientName != null">client_name = #{clientName},</if>
+        <if test="description != null">description = #{description},</if>
+        <if test="status != null">status = #{status},</if>
+        <if test="createTime != null">create_time = #{createTime},</if>
+        <if test="updateTime != null">update_time = #{updateTime},</if>
+        <if test="isDeleted != null">is_deleted = #{isDeleted},</if>
+        <if test="deleteTime != null">delete_time = #{deleteTime},</if>
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO ai_client
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <include refid="DynamicInsertColumnName"/>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <include refid="DynamicInsertColumnValue"/>
+        </trim>
+    </insert>
+
+    <update id="deleteById">
+        UPDATE ai_client
+        SET is_deleted = 1,
+        delete_time = #{deleteTime}
+        WHERE id = #{id}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="deleteByClientId">
+        UPDATE ai_client
+        SET is_deleted = 1,
+        delete_time = #{deleteTime}
+        WHERE client_id = #{clientId}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="updateById">
+        UPDATE ai_client
+        <set>
+            <include refid="DynamicUpdateColumns"/>
+        </set>
+        WHERE id = #{id}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="updateByClientId">
+        UPDATE ai_client
+        <set>
+            <include refid="DynamicUpdateColumns"/>
+        </set>
+        WHERE client_id = #{clientId} AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <select id="query"
+            resultType="com.gonglin.ai4knowledge.infrastructure.mysql.pojo.AiClient">
+        SELECT
+        <include refid="allColumns"/>
+        FROM ai_client
+        WHERE
+        1=1
+        <if test="id != null">
+            AND id = #{id}
+        </if>
+        <if test="clientId != null and clientId != ''">
+            AND client_id = #{clientId}
+        </if>
+        <if test="clientName != null and clientName != ''">
+            AND client_name LIKE CONCAT('%', #{clientName}, '%')
+        </if>
+        <if test="status != null">
+            AND status = #{status}
+        </if>
+        <if test="isDeleted != null">
+            AND is_deleted = #{isDeleted}
+        </if>
+        ORDER BY create_time DESC
+    </select>
+</mapper>

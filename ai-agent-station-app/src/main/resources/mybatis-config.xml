@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <setting name="cacheEnabled" value="true"/>
+        <setting name="logImpl" value="SLF4J"/>
+    </settings>
+    <!-- 包扫描别名，例如UserInfo -> userInfo  这个别名大小写不敏感-->
+    <typeAliases>
+        <package name="com.gonglin.ai4knowledge.domain"/>
+    </typeAliases>
+    
+    <!-- <typeHandlers>
+        <package name="com.gonglin.ai4knowledge.handler"/>
+    </typeHandlers> -->
+    
+    <!-- PageInterceptor 插件已移除，如需分页功能请添加 pagehelper 依赖 -->
+</configuration>

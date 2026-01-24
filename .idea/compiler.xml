@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="ai-agent-station-infrastructure" />
+        <module name="ai-agent-station-trigger" />
+        <module name="ai-agent-station-types" />
+        <module name="ai-agent-station-application" />
+        <module name="ai-agent-station-api" />
+        <module name="ai-agent-station-app" />
+        <module name="ai-agent-station-domain" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="ai-agent-station-case" target="17" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="ai-agent-station" options="" />
+      <module name="ai-agent-station-api" options="-parameters" />
+      <module name="ai-agent-station-app" options="-parameters" />
+      <module name="ai-agent-station-application" options="-parameters" />
+      <module name="ai-agent-station-case" options="-parameters" />
+      <module name="ai-agent-station-domain" options="-parameters" />
+      <module name="ai-agent-station-infrastructure" options="-parameters" />
+      <module name="ai-agent-station-trigger" options="-parameters" />
+      <module name="ai-agent-station-types" options="-parameters" />
+    </option>
+  </component>
+</project>

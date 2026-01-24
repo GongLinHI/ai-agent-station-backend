@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gonglin.ai4knowledge.infrastructure.mysql.mapper.AiClientToolConfigMapper">
+
+    <sql id="notDeleted">
+        is_deleted = 0
+    </sql>
+
+    <sql id="allColumns">
+        id, client_id, tool_id, tool_type, status, create_time, update_time, is_deleted, delete_time
+    </sql>
+
+    <sql id="DynamicInsertColumnName">
+        <if test="clientId != null">client_id,</if>
+        <if test="toolId != null">tool_id,</if>
+        <if test="toolType != null">tool_type,</if>
+        <if test="status != null">status,</if>
+        <if test="createTime != null">create_time,</if>
+        <if test="updateTime != null">update_time,</if>
+        <if test="isDeleted != null">is_deleted,</if>
+        <if test="deleteTime != null">delete_time,</if>
+    </sql>
+
+    <sql id="DynamicInsertColumnValue">
+        <if test="clientId != null">#{clientId},</if>
+        <if test="toolId != null">#{toolId},</if>
+        <if test="toolType != null">#{toolType},</if>
+        <if test="status != null">#{status},</if>
+        <if test="createTime != null">#{createTime},</if>
+        <if test="updateTime != null">#{updateTime},</if>
+        <if test="isDeleted != null">#{isDeleted},</if>
+        <if test="deleteTime != null">#{deleteTime},</if>
+    </sql>
+
+    <sql id="DynamicUpdateColumns">
+        <if test="clientId != null">client_id = #{clientId},</if>
+        <if test="toolId != null">tool_id = #{toolId},</if>
+        <if test="toolType != null">tool_type = #{toolType},</if>
+        <if test="status != null">status = #{status},</if>
+        <if test="createTime != null">create_time = #{createTime},</if>
+        <if test="updateTime != null">update_time = #{updateTime},</if>
+        <if test="isDeleted != null">is_deleted = #{isDeleted},</if>
+        <if test="deleteTime != null">delete_time = #{deleteTime},</if>
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO ai_client_tool_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <include refid="DynamicInsertColumnName"/>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <include refid="DynamicInsertColumnValue"/>
+        </trim>
+    </insert>
+
+    <update id="deleteById">
+        UPDATE ai_client_tool_config
+        SET is_deleted = 1,
+        delete_time = #{deleteTime}
+        WHERE id = #{id}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="deleteByClientIdAndToolId">
+        UPDATE ai_client_tool_config
+        SET is_deleted = 1,
+        delete_time = #{deleteTime}
+        WHERE client_id = #{clientId}
+        AND tool_id = #{toolId}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="deleteByClientId">
+        UPDATE ai_client_tool_config
+        SET is_deleted = 1,
+        delete_time = #{deleteTime}
+        WHERE client_id = #{clientId}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="deleteByToolId">
+        UPDATE ai_client_tool_config
+        SET is_deleted = 1,
+        delete_time = #{deleteTime}
+        WHERE tool_id = #{toolId}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="updateById">
+        UPDATE ai_client_tool_config
+        <set>
+            <include refid="DynamicUpdateColumns"/>
+        </set>
+        WHERE id = #{id}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="updateByClientIdAndToolId">
+        UPDATE ai_client_tool_config
+        <set>
+            <include refid="DynamicUpdateColumns"/>
+        </set>
+        WHERE client_id = #{clientId}
+        AND tool_id = #{toolId}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <select id="queryById"
+            resultType="com.gonglin.ai4knowledge.infrastructure.mysql.pojo.AiClientToolConfig">
+        SELECT
+        <include refid="allColumns"/>
+        FROM ai_client_tool_config
+        WHERE id = #{id} AND
+        <include refid="notDeleted"/>
+    </select>
+
+    <select id="queryByClientIdAndToolId"
+            resultType="com.gonglin.ai4knowledge.infrastructure.mysql.pojo.AiClientToolConfig">
+        SELECT
+        <include refid="allColumns"/>
+        FROM ai_client_tool_config
+        WHERE client_id = #{clientId}
+        AND tool_id = #{toolId}
+        AND
+        <include refid="notDeleted"/>
+    </select>
+
+    <select id="queryAll"
+            resultType="com.gonglin.ai4knowledge.infrastructure.mysql.pojo.AiClientToolConfig">
+        SELECT
+        <include refid="allColumns"/>
+        FROM ai_client_tool_config
+        WHERE
+        <include refid="notDeleted"/>
+        ORDER BY client_id, tool_id
+    </select>
+
+    <select id="queryByClientId"
+            resultType="com.gonglin.ai4knowledge.infrastructure.mysql.pojo.AiClientToolConfig">
+        SELECT
+        <include refid="allColumns"/>
+        FROM ai_client_tool_config
+        WHERE client_id = #{clientId} AND
+        <include refid="notDeleted"/>
+        ORDER BY tool_id
+    </select>
+
+    <select id="queryByToolId"
+            resultType="com.gonglin.ai4knowledge.infrastructure.mysql.pojo.AiClientToolConfig">
+        SELECT
+        <include refid="allColumns"/>
+        FROM ai_client_tool_config
+        WHERE tool_id = #{toolId} AND
+        <include refid="notDeleted"/>
+        ORDER BY client_id
+    </select>
+</mapper>

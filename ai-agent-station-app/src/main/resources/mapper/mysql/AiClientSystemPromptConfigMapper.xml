@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gonglin.ai4knowledge.infrastructure.mysql.mapper.AiClientSystemPromptConfigMapper">
+
+    <sql id="notDeleted">
+        is_deleted = 0
+    </sql>
+
+    <sql id="allColumns">
+        id, client_id, system_prompt_id, status, create_time, update_time, is_deleted, delete_time
+    </sql>
+
+    <sql id="DynamicInsertColumnName">
+        <if test="clientId != null">client_id,</if>
+        <if test="systemPromptId != null">system_prompt_id,</if>
+        <if test="status != null">status,</if>
+        <if test="createTime != null">create_time,</if>
+        <if test="updateTime != null">update_time,</if>
+        <if test="isDeleted != null">is_deleted,</if>
+        <if test="deleteTime != null">delete_time,</if>
+    </sql>
+
+    <sql id="DynamicInsertColumnValue">
+        <if test="clientId != null">#{clientId},</if>
+        <if test="systemPromptId != null">#{systemPromptId},</if>
+        <if test="status != null">#{status},</if>
+        <if test="createTime != null">#{createTime},</if>
+        <if test="updateTime != null">#{updateTime},</if>
+        <if test="isDeleted != null">#{isDeleted},</if>
+        <if test="deleteTime != null">#{deleteTime},</if>
+    </sql>
+
+    <sql id="DynamicUpdateColumns">
+        <if test="clientId != null">client_id = #{clientId},</if>
+        <if test="systemPromptId != null">system_prompt_id = #{systemPromptId},</if>
+        <if test="status != null">status = #{status},</if>
+        <if test="createTime != null">create_time = #{createTime},</if>
+        <if test="updateTime != null">update_time = #{updateTime},</if>
+        <if test="isDeleted != null">is_deleted = #{isDeleted},</if>
+        <if test="deleteTime != null">delete_time = #{deleteTime},</if>
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO ai_client_system_prompt_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <include refid="DynamicInsertColumnName"/>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <include refid="DynamicInsertColumnValue"/>
+        </trim>
+    </insert>
+
+    <update id="deleteById">
+        UPDATE ai_client_system_prompt_config
+        SET is_deleted = 1,
+        delete_time = #{deleteTime}
+        WHERE id = #{id}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="deleteByClientIdAndSystemPromptId">
+        UPDATE ai_client_system_prompt_config
+        SET is_deleted = 1,
+        delete_time = #{deleteTime}
+        WHERE client_id = #{clientId}
+        AND system_prompt_id = #{systemPromptId}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="deleteByClientId">
+        UPDATE ai_client_system_prompt_config
+        SET is_deleted = 1,
+        delete_time = #{deleteTime}
+        WHERE client_id = #{clientId}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="deleteBySystemPromptId">
+        UPDATE ai_client_system_prompt_config
+        SET is_deleted = 1,
+        delete_time = #{deleteTime}
+        WHERE system_prompt_id = #{systemPromptId}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="updateById">
+        UPDATE ai_client_system_prompt_config
+        <set>
+            <include refid="DynamicUpdateColumns"/>
+        </set>
+        WHERE id = #{id}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="updateByClientIdAndSystemPromptId">
+        UPDATE ai_client_system_prompt_config
+        <set>
+            <include refid="DynamicUpdateColumns"/>
+        </set>
+        WHERE client_id = #{clientId}
+        AND system_prompt_id = #{systemPromptId}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <select id="queryById"
+            resultType="com.gonglin.ai4knowledge.infrastructure.mysql.pojo.AiClientSystemPromptConfig">
+        SELECT
+        <include refid="allColumns"/>
+        FROM ai_client_system_prompt_config
+        WHERE id = #{id} AND
+        <include refid="notDeleted"/>
+    </select>
+
+    <select id="queryByClientIdAndSystemPromptId"
+            resultType="com.gonglin.ai4knowledge.infrastructure.mysql.pojo.AiClientSystemPromptConfig">
+        SELECT
+        <include refid="allColumns"/>
+        FROM ai_client_system_prompt_config
+        WHERE client_id = #{clientId}
+        AND system_prompt_id = #{systemPromptId}
+        AND
+        <include refid="notDeleted"/>
+    </select>
+
+    <select id="queryAll"
+            resultType="com.gonglin.ai4knowledge.infrastructure.mysql.pojo.AiClientSystemPromptConfig">
+        SELECT
+        <include refid="allColumns"/>
+        FROM ai_client_system_prompt_config
+        WHERE
+        <include refid="notDeleted"/>
+        ORDER BY client_id, system_prompt_id
+    </select>
+
+    <select id="queryByClientId"
+            resultType="com.gonglin.ai4knowledge.infrastructure.mysql.pojo.AiClientSystemPromptConfig">
+        SELECT
+        <include refid="allColumns"/>
+        FROM ai_client_system_prompt_config
+        WHERE client_id = #{clientId} AND
+        <include refid="notDeleted"/>
+        ORDER BY system_prompt_id
+    </select>
+
+    <select id="queryBySystemPromptId"
+            resultType="com.gonglin.ai4knowledge.infrastructure.mysql.pojo.AiClientSystemPromptConfig">
+        SELECT
+        <include refid="allColumns"/>
+        FROM ai_client_system_prompt_config
+        WHERE system_prompt_id = #{systemPromptId} AND
+        <include refid="notDeleted"/>
+        ORDER BY client_id
+    </select>
+</mapper>

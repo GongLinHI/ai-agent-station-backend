@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gonglin.ai4knowledge.infrastructure.mysql.mapper.AiAdvisorMapper">
+
+    <sql id="notDeleted">
+        is_deleted = 0
+    </sql>
+
+    <sql id="allColumns">
+        id, advisor_id, advisor_name, description, advisor_type, ext_param, status, create_time, update_time, is_deleted, delete_time
+    </sql>
+
+    <sql id="DynamicInsertColumnName">
+        <if test="advisorId != null">advisor_id,</if>
+        <if test="advisorName != null">advisor_name,</if>
+        <if test="description != null">description,</if>
+        <if test="advisorType != null">advisor_type,</if>
+        <if test="extParam != null">ext_param,</if>
+        <if test="status != null">status,</if>
+        <if test="createTime != null">create_time,</if>
+        <if test="updateTime != null">update_time,</if>
+        <if test="isDeleted != null">is_deleted,</if>
+        <if test="deleteTime != null">delete_time,</if>
+    </sql>
+
+    <sql id="DynamicInsertColumnValue">
+        <if test="advisorId != null">#{advisorId},</if>
+        <if test="advisorName != null">#{advisorName},</if>
+        <if test="description != null">#{description},</if>
+        <if test="advisorType != null">#{advisorType},</if>
+        <if test="extParam != null">#{extParam},</if>
+        <if test="status != null">#{status},</if>
+        <if test="createTime != null">#{createTime},</if>
+        <if test="updateTime != null">#{updateTime},</if>
+        <if test="isDeleted != null">#{isDeleted},</if>
+        <if test="deleteTime != null">#{deleteTime},</if>
+    </sql>
+
+    <sql id="DynamicUpdateColumns">
+        <if test="advisorId != null">advisor_id = #{advisorId},</if>
+        <if test="advisorName != null">advisor_name = #{advisorName},</if>
+        <if test="description != null">description = #{description},</if>
+        <if test="advisorType != null">advisor_type = #{advisorType},</if>
+        <if test="extParam != null">ext_param = #{extParam},</if>
+        <if test="status != null">status = #{status},</if>
+        <if test="createTime != null">create_time = #{createTime},</if>
+        <if test="updateTime != null">update_time = #{updateTime},</if>
+        <if test="isDeleted != null">is_deleted = #{isDeleted},</if>
+        <if test="deleteTime != null">delete_time = #{deleteTime},</if>
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO ai_advisor
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <include refid="DynamicInsertColumnName"/>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <include refid="DynamicInsertColumnValue"/>
+        </trim>
+    </insert>
+
+    <update id="deleteById">
+        UPDATE ai_advisor
+        SET is_deleted = 1,
+        delete_time = #{deleteTime}
+        WHERE id = #{id}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="deleteByAdvisorId">
+        UPDATE ai_advisor
+        SET is_deleted = 1,
+        delete_time = #{deleteTime}
+        WHERE advisor_id = #{advisorId}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="updateById">
+        UPDATE ai_advisor
+        <set>
+            <include refid="DynamicUpdateColumns"/>
+        </set>
+        WHERE id = #{id}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="updateByAdvisorId">
+        UPDATE ai_advisor
+        <set>
+            <include refid="DynamicUpdateColumns"/>
+        </set>
+        WHERE advisor_id = #{advisorId} AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <select id="query"
+            resultType="com.gonglin.ai4knowledge.infrastructure.mysql.pojo.AiAdvisor">
+        SELECT
+        <include refid="allColumns"/>
+        FROM ai_advisor
+        WHERE 1=1
+        <if test="id != null">
+            AND id = #{id}
+        </if>
+        <if test="advisorId != null and advisorId != ''">
+            AND advisor_id = #{advisorId}
+        </if>
+        <if test="advisorName != null and advisorName != ''">
+            AND advisor_name LIKE CONCAT('%', #{advisorName}, '%')
+        </if>
+        <if test="description != null and description != ''">
+            AND description LIKE CONCAT('%', #{description}, '%')
+        </if>
+        <if test="advisorType != null and advisorType != ''">
+            AND advisor_type = #{advisorType}
+        </if>
+        <if test="status != null">
+            AND status = #{status}
+        </if>
+        <if test="isDeleted != null">
+            AND is_deleted = #{isDeleted}
+        </if>
+        ORDER BY create_time DESC
+    </select>
+</mapper>

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gonglin.ai4knowledge.infrastructure.mysql.mapper.AiAgentFlowConfigMapper">
+
+    <sql id="notDeleted">
+        is_deleted = 0
+    </sql>
+
+    <sql id="allColumns">
+        id, agent_id, client_id, client_type, client_step_prompt, sequence, status, create_time, update_time, is_deleted, delete_time
+    </sql>
+
+    <sql id="DynamicInsertColumnName">
+        <if test="agentId != null">agent_id,</if>
+        <if test="clientId != null">client_id,</if>
+        <if test="clientType != null">client_type,</if>
+        <if test="clientStepPrompt != null">client_step_prompt,</if>
+        <if test="sequence != null">sequence,</if>
+        <if test="status != null">status,</if>
+        <if test="createTime != null">create_time,</if>
+        <if test="updateTime != null">update_time,</if>
+        <if test="isDeleted != null">is_deleted,</if>
+        <if test="deleteTime != null">delete_time,</if>
+    </sql>
+
+    <sql id="DynamicInsertColumnValue">
+        <if test="agentId != null">#{agentId},</if>
+        <if test="clientId != null">#{clientId},</if>
+        <if test="clientType != null">#{clientType},</if>
+        <if test="clientStepPrompt != null">#{clientStepPrompt},</if>
+        <if test="sequence != null">#{sequence},</if>
+        <if test="status != null">#{status},</if>
+        <if test="createTime != null">#{createTime},</if>
+        <if test="updateTime != null">#{updateTime},</if>
+        <if test="isDeleted != null">#{isDeleted},</if>
+        <if test="deleteTime != null">#{deleteTime},</if>
+    </sql>
+
+    <sql id="DynamicUpdateColumns">
+        <if test="agentId != null">agent_id = #{agentId},</if>
+        <if test="clientId != null">client_id = #{clientId},</if>
+        <if test="clientType != null">client_type = #{clientType},</if>
+        <if test="clientStepPrompt != null">client_step_prompt = #{clientStepPrompt},</if>
+        <if test="sequence != null">sequence = #{sequence},</if>
+        <if test="status != null">status = #{status},</if>
+        <if test="createTime != null">create_time = #{createTime},</if>
+        <if test="updateTime != null">update_time = #{updateTime},</if>
+        <if test="isDeleted != null">is_deleted = #{isDeleted},</if>
+        <if test="deleteTime != null">delete_time = #{deleteTime},</if>
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO ai_agent_flow_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <include refid="DynamicInsertColumnName"/>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <include refid="DynamicInsertColumnValue"/>
+        </trim>
+    </insert>
+
+    <update id="deleteById">
+        UPDATE ai_agent_flow_config
+        SET is_deleted = 1,
+        delete_time = #{deleteTime}
+        WHERE id = #{id}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+    <update id="deleteByAgentId">
+        UPDATE ai_agent_flow_config
+        SET is_deleted = 1,
+        delete_time = #{deleteTime}
+        WHERE agent_id = #{agentId}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="deleteByClientId">
+        UPDATE ai_agent_flow_config
+        SET is_deleted = 1,
+        delete_time = #{deleteTime}
+        WHERE client_id = #{clientId}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+
+    <update id="deleteByAgentIdAndClientIdAndSequence">
+        UPDATE ai_agent_flow_config
+        SET is_deleted = 1,
+        delete_time = #{deleteTime}
+        WHERE agent_id = #{agentId}
+        AND client_id = #{clientId}
+        AND sequence = #{sequence}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="updateById">
+        UPDATE ai_agent_flow_config
+        <set>
+            <include refid="DynamicUpdateColumns"/>
+        </set>
+        WHERE id = #{id}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="updateByAgentIdAndClientIdAndSequence">
+        UPDATE ai_agent_flow_config
+        <set>
+            <include refid="DynamicUpdateColumns"/>
+        </set>
+        WHERE agent_id = #{agentId}
+        AND client_id = #{clientId}
+        AND sequence = #{sequence}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <select id="queryById"
+            resultType="com.gonglin.ai4knowledge.infrastructure.mysql.pojo.AiAgentFlowConfig">
+        SELECT
+        <include refid="allColumns"/>
+        FROM ai_agent_flow_config
+        WHERE id = #{id} AND
+        <include refid="notDeleted"/>
+    </select>
+
+    <select id="queryByAgentIdAndClientIdAndSequence"
+            resultType="com.gonglin.ai4knowledge.infrastructure.mysql.pojo.AiAgentFlowConfig">
+        SELECT
+        <include refid="allColumns"/>
+        FROM ai_agent_flow_config
+        WHERE agent_id = #{agentId}
+        AND client_id = #{clientId}
+        AND sequence = #{sequence}
+        AND
+        <include refid="notDeleted"/>
+    </select>
+
+    <select id="queryAll"
+            resultType="com.gonglin.ai4knowledge.infrastructure.mysql.pojo.AiAgentFlowConfig">
+        SELECT
+        <include refid="allColumns"/>
+        FROM ai_agent_flow_config
+        WHERE
+        <include refid="notDeleted"/>
+        ORDER BY agent_id,sequence, client_id
+    </select>
+
+    <select id="queryByAgentId"
+            resultType="com.gonglin.ai4knowledge.infrastructure.mysql.pojo.AiAgentFlowConfig">
+        SELECT
+        <include refid="allColumns"/>
+        FROM ai_agent_flow_config
+        WHERE agent_id = #{agentId} AND
+        <include refid="notDeleted"/>
+        ORDER BY sequence
+    </select>
+
+    <select id="queryByClientId"
+            resultType="com.gonglin.ai4knowledge.infrastructure.mysql.pojo.AiAgentFlowConfig">
+        SELECT
+        <include refid="allColumns"/>
+        FROM ai_agent_flow_config
+        WHERE client_id = #{clientId} AND
+        <include refid="notDeleted"/>
+        ORDER BY agent_id
+    </select>
+</mapper>

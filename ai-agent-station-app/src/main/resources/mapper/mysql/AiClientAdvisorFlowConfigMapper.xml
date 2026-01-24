@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gonglin.ai4knowledge.infrastructure.mysql.mapper.AiClientAdvisorFlowConfigMapper">
+
+    <sql id="notDeleted">
+        is_deleted = 0
+    </sql>
+
+    <sql id="allColumns">
+        id, client_id, advisor_id, sequence, status, create_time, update_time, is_deleted, delete_time
+    </sql>
+
+    <sql id="DynamicInsertColumnName">
+        <if test="clientId != null">client_id,</if>
+        <if test="advisorId != null">advisor_id,</if>
+        <if test="sequence != null">sequence,</if>
+        <if test="status != null">status,</if>
+        <if test="createTime != null">create_time,</if>
+        <if test="updateTime != null">update_time,</if>
+        <if test="isDeleted != null">is_deleted,</if>
+        <if test="deleteTime != null">delete_time,</if>
+    </sql>
+
+    <sql id="DynamicInsertColumnValue">
+        <if test="clientId != null">#{clientId},</if>
+        <if test="advisorId != null">#{advisorId},</if>
+        <if test="sequence != null">#{sequence},</if>
+        <if test="status != null">#{status},</if>
+        <if test="createTime != null">#{createTime},</if>
+        <if test="updateTime != null">#{updateTime},</if>
+        <if test="isDeleted != null">#{isDeleted},</if>
+        <if test="deleteTime != null">#{deleteTime},</if>
+    </sql>
+
+    <sql id="DynamicUpdateColumns">
+        <if test="clientId != null">client_id = #{clientId},</if>
+        <if test="advisorId != null">advisor_id = #{advisorId},</if>
+        <if test="sequence != null">sequence = #{sequence},</if>
+        <if test="status != null">status = #{status},</if>
+        <if test="createTime != null">create_time = #{createTime},</if>
+        <if test="updateTime != null">update_time = #{updateTime},</if>
+        <if test="isDeleted != null">is_deleted = #{isDeleted},</if>
+        <if test="deleteTime != null">delete_time = #{deleteTime},</if>
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO ai_client_advisor_flow_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <include refid="DynamicInsertColumnName"/>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <include refid="DynamicInsertColumnValue"/>
+        </trim>
+    </insert>
+
+    <update id="deleteById">
+        UPDATE ai_client_advisor_flow_config
+        SET is_deleted = 1,
+        delete_time = #{deleteTime}
+        WHERE id = #{id}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="deleteByClientIdAndAdvisorIdAndSequence">
+        UPDATE ai_client_advisor_flow_config
+        SET is_deleted = 1,
+        delete_time = #{deleteTime}
+        WHERE client_id = #{clientId}
+        AND advisor_id = #{advisorId}
+        AND sequence = #{sequence}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="deleteByClientId">
+        UPDATE ai_client_advisor_flow_config
+        SET is_deleted = 1,
+        delete_time = #{deleteTime}
+        WHERE client_id = #{clientId}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="deleteByAdvisorId">
+        UPDATE ai_client_advisor_flow_config
+        SET is_deleted = 1,
+        delete_time = #{deleteTime}
+        WHERE advisor_id = #{advisorId}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="updateById">
+        UPDATE ai_client_advisor_flow_config
+        <set>
+            <include refid="DynamicUpdateColumns"/>
+        </set>
+        WHERE id = #{id}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="updateByClientIdAndAdvisorIdAndSequence">
+        UPDATE ai_client_advisor_flow_config
+        <set>
+            <include refid="DynamicUpdateColumns"/>
+        </set>
+        WHERE client_id = #{clientId}
+        AND advisor_id = #{advisorId}
+        AND sequence = #{sequence}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <select id="queryById"
+            resultType="com.gonglin.ai4knowledge.infrastructure.mysql.pojo.AiClientAdvisorFlowConfig">
+        SELECT
+        <include refid="allColumns"/>
+        FROM ai_client_advisor_flow_config
+        WHERE id = #{id} AND
+        <include refid="notDeleted"/>
+    </select>
+
+    <select id="queryByClientIdAndAdvisorIdAndSequence"
+            resultType="com.gonglin.ai4knowledge.infrastructure.mysql.pojo.AiClientAdvisorFlowConfig">
+        SELECT
+        <include refid="allColumns"/>
+        FROM ai_client_advisor_flow_config
+        WHERE client_id = #{clientId}
+        AND advisor_id = #{advisorId}
+        AND sequence = #{sequence}
+        AND
+        <include refid="notDeleted"/>
+    </select>
+
+    <select id="queryAll"
+            resultType="com.gonglin.ai4knowledge.infrastructure.mysql.pojo.AiClientAdvisorFlowConfig">
+        SELECT
+        <include refid="allColumns"/>
+        FROM ai_client_advisor_flow_config
+        WHERE
+        <include refid="notDeleted"/>
+        ORDER BY client_id, sequence, advisor_id
+    </select>
+
+    <select id="queryByClientId"
+            resultType="com.gonglin.ai4knowledge.infrastructure.mysql.pojo.AiClientAdvisorFlowConfig">
+        SELECT
+        <include refid="allColumns"/>
+        FROM ai_client_advisor_flow_config
+        WHERE client_id = #{clientId} AND
+        <include refid="notDeleted"/>
+        ORDER BY sequence
+    </select>
+
+    <select id="queryByAdvisorId"
+            resultType="com.gonglin.ai4knowledge.infrastructure.mysql.pojo.AiClientAdvisorFlowConfig">
+        SELECT
+        <include refid="allColumns"/>
+        FROM ai_client_advisor_flow_config
+        WHERE advisor_id = #{advisorId} AND
+        <include refid="notDeleted"/>
+        ORDER BY sequence
+    </select>
+</mapper>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gonglin.ai4knowledge.infrastructure.mysql.mapper.AiAgentMapper">
+
+    <sql id="notDeleted">
+        is_deleted = 0
+    </sql>
+    <sql id="allColumns">
+        id, agent_id, agent_name, description, channel,strategy, status, create_time, update_time, is_deleted, delete_time
+    </sql>
+
+    <sql id="DynamicInsertColumnName">
+        <if test="agentId != null">agent_id,</if>
+        <if test="agentName != null">agent_name,</if>
+        <if test="description != null">description,</if>
+        <if test="channel != null">channel,</if>
+        <if test="strategy != null">strategy,</if>
+        <if test="status != null">status,</if>
+        <if test="createTime != null">create_time,</if>
+        <if test="updateTime != null">update_time,</if>
+        <if test="isDeleted != null">is_deleted,</if>
+        <if test="deleteTime != null">delete_time,</if>
+    </sql>
+
+    <sql id="DynamicInsertColumnValue">
+        <if test="agentId != null">#{agentId},</if>
+        <if test="agentName != null">#{agentName},</if>
+        <if test="description != null">#{description},</if>
+        <if test="channel != null">#{channel},</if>
+        <if test="strategy != null">#{strategy},</if>
+        <if test="status != null">#{status},</if>
+        <if test="createTime != null">#{createTime},</if>
+        <if test="updateTime != null">#{updateTime},</if>
+        <if test="isDeleted != null">#{isDeleted},</if>
+        <if test="deleteTime != null">#{deleteTime},</if>
+    </sql>
+
+    <sql id="DynamicUpdateColumns">
+        <if test="agentId != null">agent_id = #{agentId},</if>
+        <if test="agentName != null">agent_name = #{agentName},</if>
+        <if test="description != null">description = #{description},</if>
+        <if test="channel != null">channel = #{channel},</if>
+        <if test="strategy != null">strategy = #{strategy},</if>
+        <if test="status != null">status = #{status},</if>
+        <if test="createTime != null">create_time = #{createTime},</if>
+        <if test="updateTime != null">update_time = #{updateTime},</if>
+        <if test="isDeleted != null">is_deleted = #{isDeleted},</if>
+        <if test="deleteTime != null">delete_time = #{deleteTime},</if>
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO ai_agent
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <include refid="DynamicInsertColumnName"/>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <include refid="DynamicInsertColumnValue"/>
+        </trim>
+    </insert>
+
+    <update id="deleteById">
+        UPDATE ai_agent
+        SET is_deleted = 1,
+        delete_time = #{deleteTime}
+        WHERE id = #{id}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="deleteByAgentId">
+        UPDATE ai_agent
+        SET is_deleted = 1,
+        delete_time = #{deleteTime}
+        WHERE agent_id = #{agentId}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="updateById">
+        UPDATE ai_agent
+        <set>
+            <include refid="DynamicUpdateColumns"/>
+        </set>
+        WHERE id = #{id}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="updateByAgentId">
+        UPDATE ai_agent
+        <set>
+            <include refid="DynamicUpdateColumns"/>
+        </set>
+        WHERE agent_id = #{agentId} AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <select id="queryById"
+            resultType="com.gonglin.ai4knowledge.infrastructure.mysql.pojo.AiAgent">
+        SELECT
+        <include refid="allColumns"/>
+        FROM ai_agent
+        WHERE id = #{id} AND
+        <include refid="notDeleted"/>
+    </select>
+
+    <select id="queryByAgentId"
+            parameterType="java.lang.String"
+            resultType="com.gonglin.ai4knowledge.infrastructure.mysql.pojo.AiAgent">
+        SELECT
+        <include refid="allColumns"/>
+        FROM ai_agent
+        WHERE agent_id = #{agentId} AND
+        <include refid="notDeleted"/>
+    </select>
+
+    <select id="queryByStatus"
+            resultType="com.gonglin.ai4knowledge.infrastructure.mysql.pojo.AiAgent">
+        SELECT
+        <include refid="allColumns"/>
+        FROM ai_agent
+        WHERE status = #{status} AND
+        <include refid="notDeleted"/>
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="queryAll"
+            resultType="com.gonglin.ai4knowledge.infrastructure.mysql.pojo.AiAgent">
+        SELECT
+        <include refid="allColumns"/>
+        FROM ai_agent
+        WHERE
+        <include refid="notDeleted"/>
+        ORDER BY create_time DESC
+    </select>
+</mapper>

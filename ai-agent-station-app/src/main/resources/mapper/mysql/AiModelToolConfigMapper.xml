@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gonglin.ai4knowledge.infrastructure.mysql.mapper.AiModelToolConfigMapper">
+
+    <sql id="notDeleted">
+        is_deleted = 0
+    </sql>
+
+    <sql id="allColumns">
+        id, model_id, tool_id, tool_type, status, create_time, update_time, is_deleted, delete_time
+    </sql>
+
+    <sql id="DynamicInsertColumnName">
+        <if test="modelId != null">model_id,</if>
+        <if test="toolId != null">tool_id,</if>
+        <if test="toolType != null">tool_type,</if>
+        <if test="status != null">status,</if>
+        <if test="createTime != null">create_time,</if>
+        <if test="updateTime != null">update_time,</if>
+        <if test="isDeleted != null">is_deleted,</if>
+        <if test="deleteTime != null">delete_time,</if>
+    </sql>
+
+    <sql id="DynamicInsertColumnValue">
+        <if test="modelId != null">#{modelId},</if>
+        <if test="toolId != null">#{toolId},</if>
+        <if test="toolType != null">#{toolType},</if>
+        <if test="status != null">#{status},</if>
+        <if test="createTime != null">#{createTime},</if>
+        <if test="updateTime != null">#{updateTime},</if>
+        <if test="isDeleted != null">#{isDeleted},</if>
+        <if test="deleteTime != null">#{deleteTime},</if>
+    </sql>
+
+    <sql id="DynamicUpdateColumns">
+        <if test="modelId != null">model_id = #{modelId},</if>
+        <if test="toolId != null">tool_id = #{toolId},</if>
+        <if test="toolType != null">tool_type = #{toolType},</if>
+        <if test="status != null">status = #{status},</if>
+        <if test="createTime != null">create_time = #{createTime},</if>
+        <if test="updateTime != null">update_time = #{updateTime},</if>
+        <if test="isDeleted != null">is_deleted = #{isDeleted},</if>
+        <if test="deleteTime != null">delete_time = #{deleteTime},</if>
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO ai_model_tool_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <include refid="DynamicInsertColumnName"/>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <include refid="DynamicInsertColumnValue"/>
+        </trim>
+    </insert>
+
+    <update id="deleteById">
+        UPDATE ai_model_tool_config
+        SET is_deleted = 1,
+        delete_time = #{deleteTime}
+        WHERE id = #{id}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="deleteByModelIdAndToolId">
+        UPDATE ai_model_tool_config
+        SET is_deleted = 1,
+        delete_time = #{deleteTime}
+        WHERE model_id = #{modelId}
+        AND tool_id = #{toolId}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="deleteByModelId">
+        UPDATE ai_model_tool_config
+        SET is_deleted = 1,
+        delete_time = #{deleteTime}
+        WHERE model_id = #{modelId}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="deleteByToolId">
+        UPDATE ai_model_tool_config
+        SET is_deleted = 1,
+        delete_time = #{deleteTime}
+        WHERE tool_id = #{toolId}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="updateById">
+        UPDATE ai_model_tool_config
+        <set>
+            <include refid="DynamicUpdateColumns"/>
+        </set>
+        WHERE id = #{id}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="updateByModelIdAndToolId">
+        UPDATE ai_model_tool_config
+        <set>
+            <include refid="DynamicUpdateColumns"/>
+        </set>
+        WHERE model_id = #{modelId}
+        AND tool_id = #{toolId}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <select id="queryById"
+            resultType="com.gonglin.ai4knowledge.infrastructure.mysql.pojo.AiModelToolConfig">
+        SELECT
+        <include refid="allColumns"/>
+        FROM ai_model_tool_config
+        WHERE id = #{id} AND
+        <include refid="notDeleted"/>
+    </select>
+
+    <select id="queryByModelIdAndToolId"
+            resultType="com.gonglin.ai4knowledge.infrastructure.mysql.pojo.AiModelToolConfig">
+        SELECT
+        <include refid="allColumns"/>
+        FROM ai_model_tool_config
+        WHERE model_id = #{modelId}
+        AND tool_id = #{toolId}
+        AND
+        <include refid="notDeleted"/>
+    </select>
+
+    <select id="queryAll"
+            resultType="com.gonglin.ai4knowledge.infrastructure.mysql.pojo.AiModelToolConfig">
+        SELECT
+        <include refid="allColumns"/>
+        FROM ai_model_tool_config
+        WHERE
+        <include refid="notDeleted"/>
+        ORDER BY model_id, tool_id
+    </select>
+
+    <select id="queryByModelId"
+            resultType="com.gonglin.ai4knowledge.infrastructure.mysql.pojo.AiModelToolConfig">
+        SELECT
+        <include refid="allColumns"/>
+        FROM ai_model_tool_config
+        WHERE model_id = #{modelId} AND
+        <include refid="notDeleted"/>
+        ORDER BY tool_id
+    </select>
+
+    <select id="queryByToolId"
+            resultType="com.gonglin.ai4knowledge.infrastructure.mysql.pojo.AiModelToolConfig">
+        SELECT
+        <include refid="allColumns"/>
+        FROM ai_model_tool_config
+        WHERE tool_id = #{toolId} AND
+        <include refid="notDeleted"/>
+        ORDER BY model_id
+    </select>
+</mapper>

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gonglin.ai4knowledge.infrastructure.mysql.mapper.AiModelMapper">
+
+    <sql id="notDeleted">
+        is_deleted = 0
+    </sql>
+
+    <sql id="allColumns">
+        id, model_id, model_name, api_id, model_type, model_provider, model_version, ext_param, timeout, status, create_time, update_time, is_deleted, delete_time
+    </sql>
+
+    <sql id="DynamicInsertColumnName">
+        <if test="modelId != null">model_id,</if>
+        <if test="modelName != null">model_name,</if>
+        <if test="apiId != null">api_id,</if>
+        <if test="modelType != null">model_type,</if>
+        <if test="modelProvider != null">model_provider,</if>
+        <if test="modelVersion != null">model_version,</if>
+        <if test="extParam != null">ext_param,</if>
+        <if test="timeout != null">timeout,</if>
+        <if test="status != null">status,</if>
+        <if test="createTime != null">create_time,</if>
+        <if test="updateTime != null">update_time,</if>
+        <if test="isDeleted != null">is_deleted,</if>
+        <if test="deleteTime != null">delete_time,</if>
+    </sql>
+
+    <sql id="DynamicInsertColumnValue">
+        <if test="modelId != null">#{modelId},</if>
+        <if test="modelName != null">#{modelName},</if>
+        <if test="apiId != null">#{apiId},</if>
+        <if test="modelType != null">#{modelType},</if>
+        <if test="modelProvider != null">#{modelProvider},</if>
+        <if test="modelVersion != null">#{modelVersion},</if>
+        <if test="extParam != null">#{extParam},</if>
+        <if test="timeout != null">#{timeout},</if>
+        <if test="status != null">#{status},</if>
+        <if test="createTime != null">#{createTime},</if>
+        <if test="updateTime != null">#{updateTime},</if>
+        <if test="isDeleted != null">#{isDeleted},</if>
+        <if test="deleteTime != null">#{deleteTime},</if>
+    </sql>
+
+    <sql id="DynamicUpdateColumns">
+        <if test="modelId != null">model_id = #{modelId},</if>
+        <if test="modelName != null">model_name = #{modelName},</if>
+        <if test="apiId != null">api_id = #{apiId},</if>
+        <if test="modelType != null">model_type = #{modelType},</if>
+        <if test="modelProvider != null">model_provider = #{modelProvider},</if>
+        <if test="modelVersion != null">model_version = #{modelVersion},</if>
+        <if test="extParam != null">ext_param = #{extParam},</if>
+        <if test="timeout != null">timeout = #{timeout},</if>
+        <if test="status != null">status = #{status},</if>
+        <if test="createTime != null">create_time = #{createTime},</if>
+        <if test="updateTime != null">update_time = #{updateTime},</if>
+        <if test="isDeleted != null">is_deleted = #{isDeleted},</if>
+        <if test="deleteTime != null">delete_time = #{deleteTime},</if>
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO ai_model
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <include refid="DynamicInsertColumnName"/>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <include refid="DynamicInsertColumnValue"/>
+        </trim>
+    </insert>
+
+    <update id="deleteById">
+        UPDATE ai_model
+        SET is_deleted = 1,
+        delete_time = #{deleteTime}
+        WHERE id = #{id}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="deleteByModelId">
+        UPDATE ai_model
+        SET is_deleted = 1,
+        delete_time = #{deleteTime}
+        WHERE model_id = #{modelId}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="updateById">
+        UPDATE ai_model
+        <set>
+            <include refid="DynamicUpdateColumns"/>
+        </set>
+        WHERE id = #{id}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="updateByModelId">
+        UPDATE ai_model
+        <set>
+            <include refid="DynamicUpdateColumns"/>
+        </set>
+        WHERE model_id = #{modelId} AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <select id="query"
+            parameterType="com.gonglin.ai4knowledge.infrastructure.mysql.pojo.AiModel"
+            resultType="com.gonglin.ai4knowledge.infrastructure.mysql.pojo.AiModel">
+        SELECT
+        <include refid="allColumns"/>
+        FROM ai_model
+        WHERE 1=1
+        <if test="id != null">
+            AND id = #{id}
+        </if>
+        <if test="modelId != null and modelId != ''">
+            AND model_id = #{modelId}
+        </if>
+        <if test="modelName != null and modelName != ''">
+            AND model_name LIKE CONCAT('%', #{modelName}, '%')
+        </if>
+        <if test="apiId != null and apiId != ''">
+            AND api_id LIKE CONCAT('%', #{apiId}, '%')
+        </if>
+        <if test="modelType != null and modelType != ''">
+            AND model_type LIKE CONCAT('%', #{modelType}, '%')
+        </if>
+        <if test="modelProvider != null and modelProvider != ''">
+            AND model_provider LIKE CONCAT('%', #{modelProvider}, '%')
+        </if>
+        <if test="modelVersion != null and modelVersion != ''">
+            AND model_version LIKE CONCAT('%', #{modelVersion}, '%')
+        </if>
+        <if test="extParam != null and extParam != ''">
+            AND ext_param LIKE CONCAT('%', #{extParam}, '%')
+        </if>
+        <if test="timeout != null">
+            AND timeout = #{timeout}
+        </if>
+        <if test="status != null">
+            AND status = #{status}
+        </if>
+        <if test="isDeleted != null">
+            AND is_deleted = #{isDeleted}
+        </if>
+        ORDER BY create_time DESC
+    </select>
+</mapper>

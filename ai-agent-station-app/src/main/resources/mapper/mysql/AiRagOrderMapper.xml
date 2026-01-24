@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gonglin.ai4knowledge.infrastructure.mysql.mapper.AiRagOrderMapper">
+
+    <sql id="notDeleted">
+        is_deleted = 0
+    </sql>
+
+    <sql id="allColumns">
+        id, rag_id, rag_name, knowledge_tag, status, create_time, update_time, is_deleted, delete_time
+    </sql>
+
+    <sql id="DynamicInsertColumnName">
+        <if test="ragId != null">rag_id,</if>
+        <if test="ragName != null">rag_name,</if>
+        <if test="knowledgeTag != null">knowledge_tag,</if>
+        <if test="status != null">status,</if>
+        <if test="createTime != null">create_time,</if>
+        <if test="updateTime != null">update_time,</if>
+        <if test="isDeleted != null">is_deleted,</if>
+        <if test="deleteTime != null">delete_time,</if>
+    </sql>
+
+    <sql id="DynamicInsertColumnValue">
+        <if test="ragId != null">#{ragId},</if>
+        <if test="ragName != null">#{ragName},</if>
+        <if test="knowledgeTag != null">#{knowledgeTag},</if>
+        <if test="status != null">#{status},</if>
+        <if test="createTime != null">#{createTime},</if>
+        <if test="updateTime != null">#{updateTime},</if>
+        <if test="isDeleted != null">#{isDeleted},</if>
+        <if test="deleteTime != null">#{deleteTime},</if>
+    </sql>
+
+    <sql id="DynamicUpdateColumns">
+        <if test="ragId != null">rag_id = #{ragId},</if>
+        <if test="ragName != null">rag_name = #{ragName},</if>
+        <if test="knowledgeTag != null">knowledge_tag = #{knowledgeTag},</if>
+        <if test="status != null">status = #{status},</if>
+        <if test="createTime != null">create_time = #{createTime},</if>
+        <if test="updateTime != null">update_time = #{updateTime},</if>
+        <if test="isDeleted != null">is_deleted = #{isDeleted},</if>
+        <if test="deleteTime != null">delete_time = #{deleteTime},</if>
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO ai_rag_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <include refid="DynamicInsertColumnName"/>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <include refid="DynamicInsertColumnValue"/>
+        </trim>
+    </insert>
+
+    <update id="deleteById">
+        UPDATE ai_rag_order
+        SET is_deleted = 1,
+        delete_time = #{deleteTime}
+        WHERE id = #{id}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="deleteByRagId">
+        UPDATE ai_rag_order
+        SET is_deleted = 1,
+        delete_time = #{deleteTime}
+        WHERE rag_id = #{ragId}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="updateById">
+        UPDATE ai_rag_order
+        <set>
+            <include refid="DynamicUpdateColumns"/>
+        </set>
+        WHERE id = #{id}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="updateByRagId">
+        UPDATE ai_rag_order
+        <set>
+            <include refid="DynamicUpdateColumns"/>
+        </set>
+        WHERE rag_id = #{ragId} AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <select id="query"
+            resultType="com.gonglin.ai4knowledge.infrastructure.mysql.pojo.AiRagOrder">
+        SELECT
+        <include refid="allColumns"/>
+        FROM ai_rag_order
+        WHERE 1=1
+        <if test="id != null">
+            AND id = #{id}
+        </if>
+        <if test="ragId != null and ragId != ''">
+            AND rag_id = #{ragId}
+        </if>
+        <if test="ragName != null and ragName != ''">
+            AND rag_name LIKE CONCAT('%', #{ragName}, '%')
+        </if>
+        <if test="knowledgeTag != null and knowledgeTag != ''">
+            AND knowledge_tag LIKE CONCAT('%', #{knowledgeTag}, '%')
+        </if>
+        <if test="status != null">
+            AND status = #{status}
+        </if>
+        <if test="isDeleted != null">
+            AND is_deleted = #{isDeleted}
+        </if>
+        <if test="deleteTime != null">
+            AND delete_time = #{deleteTime}
+        </if>
+        <if test="createTime != null">
+            AND create_time = #{createTime}
+        </if>
+        <if test="updateTime != null">
+            AND update_time = #{updateTime}
+        </if>
+        ORDER BY create_time DESC
+    </select>
+
+</mapper>
