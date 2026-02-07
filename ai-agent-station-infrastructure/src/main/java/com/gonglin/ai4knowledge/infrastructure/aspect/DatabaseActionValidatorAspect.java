@@ -26,7 +26,6 @@ import java.util.Map;
 @Order(1)
 @Slf4j
 public class DatabaseActionValidatorAspect {
-
     @SuppressWarnings("rawtypes")
     private final Map<String, DatabaseEntityValidator> map;
 

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gonglin.ai4knowledge.infrastructure.mysql.mapper.RolePermissionMapper">
+
+    <sql id="notDeleted">
+        is_deleted = 0
+    </sql>
+
+    <sql id="allColumns">
+        id, role_id, perm_id, create_time, update_time, is_deleted, delete_time
+    </sql>
+
+    <sql id="DynamicInsertColumnName">
+        <if test="roleId != null">role_id,</if>
+        <if test="permId != null">perm_id,</if>
+        <if test="createTime != null">create_time,</if>
+        <if test="updateTime != null">update_time,</if>
+        <if test="isDeleted != null">is_deleted,</if>
+        <if test="deleteTime != null">delete_time,</if>
+    </sql>
+
+    <sql id="DynamicInsertColumnValue">
+        <if test="roleId != null">#{roleId},</if>
+        <if test="permId != null">#{permId},</if>
+        <if test="createTime != null">#{createTime},</if>
+        <if test="updateTime != null">#{updateTime},</if>
+        <if test="isDeleted != null">#{isDeleted},</if>
+        <if test="deleteTime != null">#{deleteTime},</if>
+    </sql>
+
+    <sql id="DynamicUpdateColumns">
+        <if test="roleId != null">role_id = #{roleId},</if>
+        <if test="permId != null">perm_id = #{permId},</if>
+        <if test="createTime != null">create_time = #{createTime},</if>
+        <if test="updateTime != null">update_time = #{updateTime},</if>
+        <if test="isDeleted != null">is_deleted = #{isDeleted},</if>
+        <if test="deleteTime != null">delete_time = #{deleteTime},</if>
+        <if test="deleteTime == null and isDeleted != null">delete_time = null,</if>
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO role_permission
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <include refid="DynamicInsertColumnName"/>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <include refid="DynamicInsertColumnValue"/>
+        </trim>
+    </insert>
+
+    <update id="deleteById">
+        UPDATE role_permission
+        SET is_deleted = 1,
+        delete_time = #{deleteTime}
+        WHERE id = #{id}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="deleteByRoleId">
+        UPDATE role_permission
+        SET is_deleted = 1,
+        delete_time = #{deleteTime}
+        WHERE role_id = #{roleId}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="deleteByPermId">
+        UPDATE role_permission
+        SET is_deleted = 1,
+        delete_time = #{deleteTime}
+        WHERE perm_id = #{permId}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="deleteByRoleIdAndPermId">
+        UPDATE role_permission
+        SET is_deleted = 1,
+        delete_time = #{deleteTime}
+        WHERE role_id = #{roleId}
+        AND perm_id = #{permId}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="updateById">
+        UPDATE role_permission
+        <set>
+            <include refid="DynamicUpdateColumns"/>
+        </set>
+        WHERE id = #{id}
+        AND
+        <include refid="notDeleted"/>
+    </update>
+
+    <update id="updateByRoleIdAndPermId">
+        UPDATE role_permission
+        <set>
+            <include refid="DynamicUpdateColumns"/>
+        </set>
+        WHERE role_id = #{roleId}
+        AND perm_id = #{permId}
+    </update>
+
+    <select id="queryById"
+            resultType="com.gonglin.ai4knowledge.infrastructure.mysql.pojo.RolePermission">
+        SELECT
+        <include refid="allColumns"/>
+        FROM role_permission
+        WHERE id = #{id}
+        AND
+        <include refid="notDeleted"/>
+    </select>
+
+    <select id="queryByRoleIdAndPermId"
+            resultType="com.gonglin.ai4knowledge.infrastructure.mysql.pojo.RolePermission">
+        SELECT
+        <include refid="allColumns"/>
+        FROM role_permission
+        WHERE role_id = #{roleId}
+        AND perm_id = #{permId}
+        LIMIT 1
+    </select>
+
+    <select id="queryAll"
+            resultType="com.gonglin.ai4knowledge.infrastructure.mysql.pojo.RolePermission">
+        SELECT
+        <include refid="allColumns"/>
+        FROM role_permission
+        WHERE
+        <include refid="notDeleted"/>
+        ORDER BY role_id, perm_id
+    </select>
+
+    <select id="queryByRoleId"
+            resultType="com.gonglin.ai4knowledge.infrastructure.mysql.pojo.RolePermission">
+        SELECT
+        <include refid="allColumns"/>
+        FROM role_permission
+        WHERE role_id = #{roleId}
+        AND
+        <include refid="notDeleted"/>
+        ORDER BY perm_id
+    </select>
+
+    <select id="queryByPermId"
+            resultType="com.gonglin.ai4knowledge.infrastructure.mysql.pojo.RolePermission">
+        SELECT
+        <include refid="allColumns"/>
+        FROM role_permission
+        WHERE perm_id = #{permId}
+        AND
+        <include refid="notDeleted"/>
+        ORDER BY role_id
+    </select>
+</mapper>

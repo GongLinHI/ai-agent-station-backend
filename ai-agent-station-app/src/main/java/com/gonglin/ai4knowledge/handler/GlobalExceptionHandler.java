@@ -1,10 +1,12 @@
 package com.gonglin.ai4knowledge.handler;
 
+import cn.dev33.satoken.exception.NotLoginException;
+import cn.dev33.satoken.exception.NotPermissionException;
+import cn.dev33.satoken.exception.NotRoleException;
+import cn.dev33.satoken.exception.SaTokenException;
 import com.gonglin.ai4knowledge.api.Response;
 import com.gonglin.ai4knowledge.types.enums.ExceptionCode;
 import com.gonglin.ai4knowledge.types.exception.AgentExecutionException;
-import com.gonglin.ai4knowledge.types.exception.AppRuntimeException;
-import com.gonglin.ai4knowledge.types.exception.ArmoryException;
 import com.gonglin.ai4knowledge.types.exception.AiAdvisorException;
 import com.gonglin.ai4knowledge.types.exception.AiApiException;
 import com.gonglin.ai4knowledge.types.exception.AiClientException;
@@ -12,6 +14,9 @@ import com.gonglin.ai4knowledge.types.exception.AiMcpToolException;
 import com.gonglin.ai4knowledge.types.exception.AiModelException;
 import com.gonglin.ai4knowledge.types.exception.AiRagOrderException;
 import com.gonglin.ai4knowledge.types.exception.AiSystemPromptException;
+import com.gonglin.ai4knowledge.types.exception.AppRuntimeException;
+import com.gonglin.ai4knowledge.types.exception.ArmoryException;
+import com.gonglin.ai4knowledge.types.exception.AuthException;
 import com.gonglin.ai4knowledge.types.exception.BaseException;
 import com.gonglin.ai4knowledge.types.exception.McpException;
 import com.gonglin.ai4knowledge.types.exception.NetworkException;
@@ -20,6 +25,7 @@ import com.gonglin.ai4knowledge.types.exception.RefuseInsertException;
 import com.gonglin.ai4knowledge.types.exception.RefuseQueryException;
 import com.gonglin.ai4knowledge.types.exception.RefuseUpdateException;
 import com.gonglin.ai4knowledge.types.exception.ResourceException;
+import com.gonglin.ai4knowledge.types.exception.UserException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
@@ -183,5 +189,48 @@ public class GlobalExceptionHandler {
     public Response<Boolean> handleAiRagOrderException(AiRagOrderException e) {
         log.error("RAG知识库异常：{}", e.getMessage(), e);
         return Response.failure(e.getCode(), e.getMessage());
+    }
+
+    @ExceptionHandler(AuthException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public Response<Boolean> handleAuthException(AuthException e) {
+        log.error("认证异常：{}", e.getMessage(), e);
+        return Response.failure(e.getCode(), e.getMessage());
+    }
+
+    @ExceptionHandler(UserException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public Response<Boolean> handleUserException(UserException e) {
+        log.error("用户异常：{}", e.getMessage(), e);
+        return Response.failure(e.getCode(), e.getMessage());
+    }
+
+    @ExceptionHandler(NotLoginException.class)
+    public Response<Boolean> handleNotLoginException(NotLoginException e) {
+        log.error("未登录异常：{}", e.getMessage(), e);
+        return Response.failure(ExceptionCode.AUTH_NOT_LOGIN.getCode(),
+                                ExceptionCode.AUTH_NOT_LOGIN.getMessage());
+    }
+
+    @ExceptionHandler(NotPermissionException.class)
+    public Response<Boolean> handleNotPermissionException(NotPermissionException e) {
+        log.error("无权限异常：{}", e.getMessage(), e);
+        return Response.failure(ExceptionCode.AUTH_NO_PERMISSION.getCode(),
+                                ExceptionCode.AUTH_NO_PERMISSION.getMessage());
+    }
+
+    @ExceptionHandler(NotRoleException.class)
+    public Response<Boolean> handleNotRoleException(NotRoleException e) {
+        log.error("无角色异常：{}", e.getMessage(), e);
+        return Response.failure(ExceptionCode.AUTH_NO_PERMISSION.getCode(),
+                                ExceptionCode.AUTH_NO_PERMISSION.getMessage());
+    }
+
+
+    @ExceptionHandler(SaTokenException.class)
+    public Response<Boolean> handleSaTokenException(SaTokenException e) {
+        log.error("Sa-Token异常：{}", e.getMessage(), e);
+        return Response.failure(ExceptionCode.AUTH_TOKEN_INVALID.getCode(),
+                                ExceptionCode.AUTH_TOKEN_INVALID.getMessage());
     }
 }

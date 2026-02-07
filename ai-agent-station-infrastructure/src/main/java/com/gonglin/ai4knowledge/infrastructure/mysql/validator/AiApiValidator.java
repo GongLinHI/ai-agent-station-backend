@@ -52,8 +52,9 @@ public class AiApiValidator implements DatabaseEntityValidator<AiApi> {
                 List<AiClientModelConfig> clientConfigs = aiClientModelConfigMapper.queryByModelId(modelId);
 
                 if (!clientConfigs.isEmpty()) {
-                    List<String> clientIds = clientConfigs.stream().map(AiClientModelConfig::getClientId).collect(
-                            Collectors.toList());
+                    List<String> clientIds = clientConfigs.stream()
+                            .map(AiClientModelConfig::getClientId)
+                            .toList();
 
                     for (String clientId : clientIds) {
                         List<AiAgentFlowConfig> agentConfigs = aiAgentFlowConfigMapper.queryByClientId(clientId);
@@ -97,17 +98,18 @@ public class AiApiValidator implements DatabaseEntityValidator<AiApi> {
                 List<AiClientModelConfig> clientConfigs = aiClientModelConfigMapper.queryByModelId(modelId);
 
                 if (!clientConfigs.isEmpty()) {
-                    List<String> clientIds = clientConfigs.stream().map(AiClientModelConfig::getClientId).collect(
-                            Collectors.toList());
+                    List<String> clientIds = clientConfigs.stream()
+                            .map(AiClientModelConfig::getClientId)
+                            .toList();
 
                     for (String clientId : clientIds) {
                         List<AiAgentFlowConfig> agentConfigs = aiAgentFlowConfigMapper.queryByClientId(clientId);
                         for (AiAgentFlowConfig agentConfig : agentConfigs) {
                             if (agentConfig.getStatus() == 1 && agentConfig.getIsDeleted() == 0) {
                                 throw new RefuseDeleteException(ExceptionCode.REFUSE_DELETE,
-                                        String.format(
-                                                "无法删除API [%s]，因为存在启用的依赖链路：API -> 模型 [%s] -> 客户端 [%s] -> 智能体配置",
-                                                apiId, modelId, clientId));
+                                                                String.format(
+                                                                        "无法删除API [%s]，因为存在启用的依赖链路：API -> 模型 [%s] -> 客户端 [%s] -> 智能体配置",
+                                                                        apiId, modelId, clientId));
                             }
                         }
                     }

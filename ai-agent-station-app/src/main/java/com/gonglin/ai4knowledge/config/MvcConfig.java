@@ -1,9 +1,13 @@
 package com.gonglin.ai4knowledge.config;
 
+import cn.dev33.satoken.interceptor.SaInterceptor;
+import cn.dev33.satoken.router.SaRouter;
+import cn.dev33.satoken.stp.StpUtil;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 import java.util.List;
@@ -28,5 +32,15 @@ public class MvcConfig extends WebMvcConfigurationSupport {
         messageConverter.setObjectMapper(new JacksonObjectMapper());
         // 添加到转换器列表中
         converters.add(0, messageConverter);
+    }
+
+    @Override
+    protected void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new SaInterceptor(handler -> SaRouter.match("/admin/**", r -> {
+                                    StpUtil.checkLogin();
+                                    StpUtil.checkRole("admin");
+                                }))
+        ).addPathPatterns("/**");
+        super.addInterceptors(registry);
     }
 }

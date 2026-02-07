@@ -95,6 +95,16 @@
                 <version>2.1.1</version>
             </dependency>
 
+            <!-- Sa-Token 权限认证 -->
+            <!-- Source: https://mvnrepository.com/artifact/cn.dev33/sa-token-bom -->
+            <dependency>
+                <groupId>cn.dev33</groupId>
+                <artifactId>sa-token-bom</artifactId>
+                <version>1.44.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 </project>

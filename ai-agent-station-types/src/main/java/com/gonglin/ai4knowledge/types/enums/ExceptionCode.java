@@ -63,7 +63,19 @@ public enum ExceptionCode {
     MCP_TOOL_ID_NOT_FOUND("1401", "MCP工具ID不存在"),
 
     RAG_ORDER_NOT_FOUND("1500", "RAG知识库不存在"),
-    RAG_ORDER_ID_NOT_FOUND("1501", "RAG知识库ID不存在");
+    RAG_ORDER_ID_NOT_FOUND("1501", "RAG知识库ID不存在"),
+
+    AUTH_NOT_LOGIN("1600", "未登录"),
+    AUTH_NO_PERMISSION("1601", "无权限"),
+    AUTH_TOKEN_INVALID("1602", "Token无效"),
+
+    USER_NOT_FOUND("1700", "用户不存在"),
+    USERNAME_EXISTS("1701", "用户名已存在"),
+    PASSWORD_ERROR("1702", "密码错误"),
+    USER_DISABLED("1703", "用户已禁用"),
+
+    ROLE_NOT_FOUND("1800", "角色不存在"),
+    PERMISSION_NOT_FOUND("1900", "权限不存在");
 
     private String code;
     private String message;

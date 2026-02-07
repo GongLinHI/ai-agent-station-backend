@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 //@ConfigurationPropertiesScan // 开启配置属性扫描
 @EnableCaching // Spring Cache
 @EnableScheduling // Spring Task
-@Slf4j
+@Slf4j // 日志
 public class Application implements CommandLineRunner {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
